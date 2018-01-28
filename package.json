@@ -1,0 +1,23 @@
+{
+	"name": "telecam",
+	"version": "1.0.0",
+	"description": "",
+	"main": "telecam.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "next",
+		"build": "next build",
+		"start": "next start"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://archive.voodoowarez.com/telecam"
+	},
+	"keywords": [],
+	"author": "rektide de la faye",
+	"license": "proprietary",
+	"module": "telecam.js",
+	"dependencies": {
+		"hyperhtml": "^2.5.3"
+	}
+}
