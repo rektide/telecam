@@ -4,18 +4,47 @@ export let defaults= {
 	mediaProperties: [ "deviceId", "groupId", "kind", "label"]
 }
 
+let
+  mediaDeviceProperties=[ "deviceId", "groupId", "kind", "label"],
+  propToAttr= {
+	deviceId: "device-id",
+	groupId: "group-id",
+	kind: "kind",
+	label: "label
+  },
+  attrToProp= {
+	"device-id": "deviceId",
+	"group-id": "groupId",
+	kind: "kind",
+	label: "label",
+	id: "deviceId"
+  }
+
 export class TeleDeviceElement extends HTMLElement{
-	constructor( mediaDevice){
+	get observedAttributes(){
+		return mediaDeviceProperties
+	}
+	constructor( mediaDevice, opts){
 		super()
+		Object.assign( this, opts)
 		this.mediaDevice= mediaDevice
-		if( this.mediaDevice){
-			this.regenAttributes()
+		this.renderAttributes()
+	}
+	renderAttributes(){
+		var props= this.mediaDeviceProperties|| default.mediaDeviceProperties
+		for( var prop of props){
+			this.setAttribute( propToAttr[ prop], this.mediaDevice[ prop])
+		}
+		if( !this.noSingleId){
+			this.setAttribute( "id", this.mediaDevice.deviceId)
 		}
 	}
-	regenAttributes(){
-		var props= this.mediaProperties|| defaults.mediaProperties
-		for( var prop of props){
-			this.setAttribute( prop.toLowerCase(), this.mediaDevice[ prop])
+	attributesChangedCallback( name, oldValue, newValue){
+		if( name=== "id"&& !this.noSingleId){
+			name= "deviceId"
+		}
+		if( name&& newValue!== undefined){
+			this.mediaDevice[ attrToProp[ name]]= newValue
 		}
 	}
 }

@@ -19,7 +19,6 @@
 	"module": "telecam.js",
 	"dependencies": {
 		"hyperhtml": "^2.5.3",
-		"no-case": "^2.3.2",
 		"param-case": "^2.1.1",
 		"triggerable-generation": "^1.0.0"
 	},
