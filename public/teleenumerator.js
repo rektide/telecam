@@ -1,54 +1,39 @@
 import TeleMediaDevice from "./telemediadevice.js"
 
-import TriggerableGeneration from "/lib/triggerable-generation/triggerable-generation.js"
+import unknownFilter from "/lib/triggerable-generation/unknown.js"
 
 export let defaults= {
 	pollDevicesInterval: 2000
 }
 
 export class TeleEnumeratorElement extends HTMLElement{
-	static get observedAttributes(){
-		return [ "poll-devices-interval"]
-	}
 	constructor( options){
 		super()
 		Object.assign( this, {devices: []}, options)
+		this.unknown= unknownFilter( this.devices)
+		this.devicechangedhandler= this.devicechangedhandler.bind( this)
 		this.start()
 	}
+	async ondevicechangehandler(){
+		var devices= await navigator.mediaDevices.enumerateDevices()
+		for( var d of devices){
+			if( this.unknown( d)){
+				var deviceEl= new TeleMediaDevice( mediaDevice)
+				this.appendChild( deviceEl)
+				// TODO: create & dispatch an mediadevice event
+			}
+		}
+	}
 	start(){
-		if( this.interval){
+		if( this.running){
 			console.warn("Already started")
 			return
 		}
-
-		if( !this.refreshTrigger){
-			// generator of all devices
-			var enumerator= TriggerableGeneration(()=> navigator.mediaDevices.enumerateDevices());
-			(async ()=>{
-				for await( var mediaDevice of enumerator.asyncGenerator()){
-					// create a device element (which also stores it?)
-					var deviceEl= new TeleMediaDevice( mediaDevice)
-					this.appendChild( deviceEl)
-					// TODO: create & dispatch an mediadevice event
-				}
-			})();
-			this.refreshTrigger= enumerator.trigger
-		}
-
-		// trigger poll periodically
-		var delay= this.pollDevicesInterval|| defaults.pollDevicesInterval
-		this.interval= setInterval( this.refreshTrigger, delay)
+		this.running= false
+		MediaDevices.addEventListener( "devicechange", this.devicechangehandler)
 	}
 	stop(){
-		clearInterval( this.interval)
-		delete this.interval
-	}
-	get pollDevicesInterval(){
-		var attr= this.getAttribute( "poll-devices-interval")
-		if( attr){
-			return Number.parseFloat( attr)
-		}
-		return defaults.pollDevicesInterval
+		MediaDevices.removeeEventListener( "devicechange", this.devicechangehandler)
 	}
 	mediaDevices(){
 		var foundDevices= []
@@ -61,10 +46,6 @@ export class TeleEnumeratorElement extends HTMLElement{
 		return foundDevices
 	}
 	attributeChangedCallback(){
-		if( this.interval){
-			this.stop()
-			this.start()
-		}
 	}
 }
 export default TeleEnumeratorElement
