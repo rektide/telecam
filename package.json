@@ -5,8 +5,8 @@
 	"main": "telecam.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "next",
-		"build": "next build",
+		"build": "npm run build:cjs-to-es6",
+		"build:cjs-to-es6": "rm -rf build/es6/param-case; mkdir -p build/es6/; cp -aur node_modules/param-case node_modules/lower-case node_modules/no-case build/es6; cjs-to-es6 --verbose build/es6/* --renameImportSource='^([^.].*)//lib/$1.js/'",
 		"start": "next start"
 	},
 	"repository": {
@@ -18,6 +18,12 @@
 	"license": "proprietary",
 	"module": "telecam.js",
 	"dependencies": {
-		"hyperhtml": "^2.5.3"
+		"hyperhtml": "^2.5.3",
+		"no-case": "^2.3.2",
+		"param-case": "^2.1.1",
+		"triggerable-generation": "^1.0.0"
+	},
+	"devDependencies": {
+		"cjs-to-es6": "^1.0.1"
 	}
 }

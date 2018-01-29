@@ -1,4 +1,4 @@
-export class TeleShareElement extends HTMLDivElement{
+export class TeleShareElement extends HTMLElement{
 	static get observedAttributes(){
 		return [ "audio", "video"]
 	}

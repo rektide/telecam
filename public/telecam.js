@@ -1,11 +1,17 @@
+import teleenumerator from "./teleenumerator.js"
+import telemediadevice from "./telemediadevice.js"
 import teleaudio from "./teleaudio.js"
 import televideo from "./televideo.js"
+
 import telepreview from "./telepreview.js"
 import telecontrol from "./telecontrol.js"
+
 import teleremote from "./teleremote.js"
 import teleshare from "./teleshare.js"
 
 let teleElements= {
+	"tele-enumerator": teleenumerator,
+	"tele-mediadevice": telemediadevice,
 	"tele-audio": teleaudio,
 	"tele-video": televideo,
 	"tele-preview": telepreview,

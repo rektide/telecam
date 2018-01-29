@@ -1,0 +1,1 @@
+../../build/es6/no-case/no-case.js

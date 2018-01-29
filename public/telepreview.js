@@ -1,4 +1,4 @@
-export class TelePreviewElement extends HTMLDivElement{
+export class TelePreviewElement extends HTMLElement{
 	static get observedAttributes(){
 		return [ "audio", "video"]
 	}

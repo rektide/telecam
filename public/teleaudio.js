@@ -1,11 +1,10 @@
-export class TeleAudioElement extends HTMLDivElement{
+export class TeleAudioElement extends HTMLElement{
 	static get observedAttributes(){
 		return [ "device"]
 	}
 	constructor(){
 		super()
-		console.log("sup!")
-		mediaDevices.enumateDevices().then( console.log.bind( console))
+		navigator.mediaDevices.enumerateDevices().then( console.log.bind( console))
 	}
 	connectedCallback(){
 	}

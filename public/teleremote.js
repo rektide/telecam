@@ -1,4 +1,4 @@
-export class TeleRemoteElement extends HTMLDivElement{
+export class TeleRemoteElement extends HTMLElement{
 	static get observedAttributes(){
 		return [ "audio", "video"]
 	}
