@@ -1,7 +1,5 @@
-import ParamCase from "/lib/param-case.js"
-
 export let defaults= {
-	mediaProperties: [ "deviceId", "groupId", "kind", "label"]
+	mediaDeviceProperties: [ "deviceId", "groupId", "kind", "label"]
 }
 
 let
@@ -10,7 +8,7 @@ let
 	deviceId: "device-id",
 	groupId: "group-id",
 	kind: "kind",
-	label: "label
+	label: "label"
   },
   attrToProp= {
 	"device-id": "deviceId",
@@ -31,7 +29,7 @@ export class TeleDeviceElement extends HTMLElement{
 		this.renderAttributes()
 	}
 	renderAttributes(){
-		var props= this.mediaDeviceProperties|| default.mediaDeviceProperties
+		var props= this.mediaDeviceProperties|| defaults.mediaDeviceProperties
 		for( var prop of props){
 			this.setAttribute( propToAttr[ prop], this.mediaDevice[ prop])
 		}

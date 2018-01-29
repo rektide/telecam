@@ -1,10 +1,9 @@
 import TeleMediaDevice from "./telemediadevice.js"
 
 import TriggerableGeneration from "/lib/triggerable-generation/triggerable-generation.js"
-import ParamCase from "/lib/param-case/param-case.js"
 
 export let defaults= {
-	checkInterval: 2000
+	pollDevicesInterval: 2000
 }
 
 export class TeleEnumeratorElement extends HTMLElement{
@@ -24,7 +23,7 @@ export class TeleEnumeratorElement extends HTMLElement{
 
 		if( !this.refreshTrigger){
 			// generator of all devices
-			var enumerator= TriggerableGeneration(()=> navigator.mediaDevices.enumerateDevices())
+			var enumerator= TriggerableGeneration(()=> navigator.mediaDevices.enumerateDevices());
 			(async ()=>{
 				for await( var mediaDevice of enumerator.asyncGenerator()){
 					// create a device element (which also stores it?)
@@ -32,7 +31,7 @@ export class TeleEnumeratorElement extends HTMLElement{
 					this.appendChild( deviceEl)
 					// TODO: create & dispatch an mediadevice event
 				}
-			})()
+			})();
 			this.refreshTrigger= enumerator.trigger
 		}
 

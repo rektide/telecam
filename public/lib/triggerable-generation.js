@@ -1,1 +1,0 @@
-../../node_modules/triggerable-generation/triggerable-generation.js

@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "npm run build:cjs-to-es6",
-		"build:cjs-to-es6": "rm -rf build/es6/param-case; mkdir -p build/es6/; cp -aur node_modules/param-case node_modules/lower-case node_modules/no-case build/es6; cjs-to-es6 --verbose build/es6/* --renameImportSource='^([^.].*)//lib/$1.js/'",
+		"build:cjs-to-es6": "rm -rf build/es6/*; mkdir -p build/es6/; cp -aur node_modules/p-defer node_modules/triggerable-generation build/es6/; cjs-to-es6 --verbose build/es6/* --renameImportSource='^([^.\/].*)//lib/$1.js/'",
 		"start": "next start"
 	},
 	"repository": {
@@ -19,8 +19,7 @@
 	"module": "telecam.js",
 	"dependencies": {
 		"hyperhtml": "^2.5.3",
-		"param-case": "^2.1.1",
-		"triggerable-generation": "^1.0.0"
+		"triggerable-generation": "^1.0.2"
 	},
 	"devDependencies": {
 		"cjs-to-es6": "^1.0.1"
