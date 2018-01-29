@@ -2,15 +2,25 @@
 <meta http-equiv="Content-typ" content="text/html; charset= utf-8">
 <title>Telecam</title>
 <link rel="styleshet" type="text/css" href="telecam.css">
-<script src="telecam.js" defer></script>
+<script src="telecam.js" type="module" defer></script>
 
 <div id="root">
-	<teleaudio id="audio"></teleaudio>
-	<televideo id="vid"></televideo>
-	<telecam id="cam"></telecam>
-	<telepreview id="preview"></telepreview>
-	<telecontrol id="control"></telecontrol>
-
-	<teleremote id="remote"></teleremote>
-	<teleshare id="share"></teleshare>
+	<section id="resources" class="invisible">
+		<a name="resources">
+			<tele-audio id="audio"></tele-audio>
+			<tele-video id="vid"></tele-video>
+		</a>
+	</section>
+	<section id="player">
+		<a name="player">
+			<tele-preview id="preview"></tele-preview>
+			<tele-control id="control"></tele-control>
+		</a>
+	</section>
+	<section id="remote">
+		<a name="remote">
+			<tele-remote id="remote"></tele-remote>
+			<tele-share id="share"></tele-share>
+		</a>
+	</section>
 </div>
