@@ -1,3 +1,5 @@
+import TeleStream from "./telestream.js"
+
 export let defaults= {
 	mediaDeviceProperties: [ "deviceId", "groupId", "kind", "label"]
 }
@@ -40,11 +42,15 @@ export class TeleDeviceElement extends HTMLElement{
 		if( val.getCapabilities){
 			this._capabilities= val.getCapabilities()
 		}
+		this.stream; // does this evaluate? I think so?
 	}
 
 	// attribute accessors
 	get id(){
-		return this.getAttribute( "id")
+		return this._id|| this.deviceId
+	}
+	set id( val){
+		this._id= val
 	}
 	get deviceId(){
 		return this.getAttribute( "device-id")
@@ -64,22 +70,43 @@ export class TeleDeviceElement extends HTMLElement{
 	}
 
 	/**
+	  Return an existing TeleStream or create one for this device
 	*/
 	get stream(){
-		
+		var val
+		for( var i= this.children.length; i>= 0; --i){
+			var child= this.children[ i]
+			if( child instanceof TeleStream){
+				// we assume only one child
+				return child
+			}
+		}
+		if( !val&& this.deviceId){
+			// eat zalgo
+			var opts= { deviceID: this.deviceId, ...this.constraints}
+			if( this.kind.startsWith( "audio")){
+				opts.audio= true
+			}else if( this.kind.startsWith("video")){
+				opts.video= true
+			}
+			val= navigator.mediaDevices.getUserMedia( opts)
+			val.then( stream=> this.appendChild( new TeleStream( stream)))
+		}
+		return val
 	}
-	
 
 	/**
 	  Read the underlying device, writing out the attributes that reflect the device
 	*/
 	renderAttributes(){
-		var props= this.mediaDeviceProperties|| defaults.mediaDeviceProperties
+		var
+		  props= this.mediaDeviceProperties|| defaults.mediaDeviceProperties,
+		  deviceInfo= this.deviceInfo
 		for( var prop of props){
-			this.setAttribute( propToAttr[ prop], this.deviceInfo[ prop])
+			this.setAttribute( propToAttr[ prop], deviceInfo[ prop])
 		}
-		if( !this.noSingleId){
-			this.setAttribute( "id", this.deviceInfo.deviceId)
+		if( !this.noSingleId&& !this._id){
+			this.setAttribute( "id", deviceInfo.deviceId)
 		}
 	}
 	attributesChangedCallback( name, oldValue, newValue){
