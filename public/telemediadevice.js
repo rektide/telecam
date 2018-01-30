@@ -25,15 +25,42 @@ export class TeleDeviceElement extends HTMLElement{
 	constructor( deviceInfo, opts){
 		super()
 		Object.assign( this, opts)
-		if( deviceInfo){
-			this.deviceInfo= deviceInfo
-			this.renderAttributes()
+		this.deviceInfo= deviceInfo
+	}
+
+	get deviceInfo(){
+		return this._deviceInfo
+	}
+	set deviceInfo( val){
+		this._deviceInfo= val
+		if( !val){
+			return
+		}
+		this.renderAttributes()
+		if( val.getCapabilities){
+			this._capabilities= val.getCapabilities()
 		}
 	}
+
+	// attribute accessors
+	get id(){
+		return this.getAttribute( "id")
+	}
+	get deviceId(){
+		return this.getAttribute( "device-id")
+	}
+	get groupId(){
+		return this.getAttribute( "group-id")
+	}
+	get kind(){
+		return this.getAttribute( "kind")
+	}
+	get label(){
+		return this.getAttribute( "label")
+	}
+
 	get capabilities(){
-		if( this.deviceInfo&& this.deviceInfo.getCapabilities){
-			return this.deviceInfo.getCapabilities()
-		}
+		return this._capabilities
 	}
 
 	/**

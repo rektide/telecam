@@ -33,7 +33,7 @@ export class TeleEnumeratorElement extends HTMLElement{
 			navigator.mediaDevices.removeEventListener( "devicechange", this.devicechangehandler)
 		}
 	}
-	mediaDevices(){
+	get mediaDevices(){
 		var foundDevices= []
 		for( var i= 0; i< this.children.length; ++i){
 			var child= this.children[ i]
