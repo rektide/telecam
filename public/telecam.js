@@ -2,6 +2,7 @@ import teleenumerator from "./teleenumerator.js"
 import telemediadevice from "./telemediadevice.js"
 import teleaudio from "./teleaudio.js"
 import televideo from "./televideo.js"
+import teletrial from "./teletrial.js"
 
 import telepreview from "./telepreview.js"
 import telecontrol from "./telecontrol.js"
@@ -11,7 +12,8 @@ import teleshare from "./teleshare.js"
 
 let teleElements= {
 	"tele-enumerator": teleenumerator,
-	"tele-mediadevice": telemediadevice,
+	"tele-media-device": telemediadevice,
+	"tele-trial": teletrial,
 	"tele-audio": teleaudio,
 	"tele-video": televideo,
 	"tele-preview": telepreview,
@@ -22,6 +24,5 @@ let teleElements= {
 
 for( var name of Object.keys( teleElements)){
 	var element= teleElements[ name]
-	console.log(name)
 	customElements.define( name, element)
 }
