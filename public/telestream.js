@@ -45,7 +45,7 @@ export class TeleStreamElement extends HTMLElement{
 	}
 	_addtrack( track){
 		var el= new TeleTrackElement( track)
-		this.addChild( el)
+		this.appendChild( el)
 	}
 	removetrackHandler( e){
 		this.dispatchEvent( e)
@@ -78,8 +78,8 @@ export class TeleStreamElement extends HTMLElement{
 		var stream= this.stream
 		if( stream){
 			stream.removeEventListener( "addtrack", this.addtrackHandler)
-			stream.addEventListener( "addtrack", this.addtrackHandler)
 			stream.removeEventListener( "removetrack", this.removetrackHandler)
+			stream.addEventListener( "addtrack", this.addtrackHandler)
 			stream.addEventListener( "removetrack", this.removetrackHandler)
 
 			// add any tracks that aren't found
