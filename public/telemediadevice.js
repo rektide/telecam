@@ -1,4 +1,4 @@
-import TeleStream from "./telestream.js"
+import TeleStreamElement from "./telestream.js"
 
 export let defaults= {
 	mediaDeviceProperties: [ "deviceId", "groupId", "kind", "label"]
@@ -42,7 +42,7 @@ export class TeleDeviceElement extends HTMLElement{
 		if( val.getCapabilities){
 			this._capabilities= val.getCapabilities()
 		}
-		this.stream; // does this evaluate? I think so?
+		this.stream;
 	}
 
 	// attribute accessors
@@ -70,13 +70,13 @@ export class TeleDeviceElement extends HTMLElement{
 	}
 
 	/**
-	  Return an existing TeleStream or create one for this device
+	  Return an existing TeleStreamElement or create one for this device
 	*/
 	get stream(){
 		var val
 		for( var i= this.children.length; i>= 0; --i){
 			var child= this.children[ i]
-			if( child instanceof TeleStream){
+			if( child instanceof TeleStreamElement){
 				// we assume only one child
 				return child
 			}
@@ -90,7 +90,7 @@ export class TeleDeviceElement extends HTMLElement{
 				opts.video= true
 			}
 			val= navigator.mediaDevices.getUserMedia( opts)
-			val.then( stream=> this.appendChild( new TeleStream( stream)))
+			val.then( stream=> this.appendChild( new TeleStreamElement( stream)))
 		}
 		return val
 	}

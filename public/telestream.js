@@ -1,33 +1,25 @@
-import unknownFilter from "/lib/triggerable-generation/unknown.js"
-
-export let defaults= {
-	streamProperties: [ "active", "id"]
-}
+import TeleTrackElement from "./teletrack.js"
 
 export class TeleStreamElement extends HTMLElement{
-	get observedAttributes(){
-		return []
-	}
 	constructor( stream, opts){
-		super();
-		Object.assign( this, opts);
-		this.unknown= unknownFilter()
+		super()
+		Object.assign( this, opts)
 		this.addtrackHandler= this.addtrackHandler.bind( this)
 		this.removetrackHandler= this.removetrackHandler.bind( this)
-		this.stream= stream
+		this.stream= stream // this trigger render
 	}
-	addtrackHandler( e){
-		this.dispatchEvent( e)
-	}
-	removetrackHandler( e){
-		this.dispatchEvent( e)
-	}
+
+	// underlying properties
 	get id(){
-		return this._id|| this.deviceId
+		return this._id|| (this.stream&& this.stream.id)
 	}
 	set id( val){
 		this._id= val
 	}
+	get active(){
+		return this.stream&& this.stream.active
+	}
+
 	get stream(){
 		return this._stream
 	}
@@ -44,28 +36,69 @@ export class TeleStreamElement extends HTMLElement{
 		if( !val){
 			return
 		}
-		val.addEventListener( "addtrack", this.addtrackHandler)
-		val.addEventListener( "removetrack", this.removetrackHandler)
+		this.render()
 	}
-	get active(){
-		return this.stream&& this.strem.active
+
+	addtrackHandler( e){
+		this.dispatchEvent( e)
+		// add child -- notsure the shape here
+	}
+	_addtrack( track){
+		var el= new TeleTrackElement( track)
+		this.addChild( el)
+	}
+	removetrackHandler( e){
+		this.dispatchEvent( e)
+		// remove child
 	}
 
 	/**
-	  Read the underlying device, writing out the attributes that reflect the device
+	  Update this element to reflect the current .stream
 	*/
-	renderAttributes(){
-		var
-		  props= this.streamProperties|| defaults.streamProperties,
-		  stream= this.stream|| {}
-		for( var prop of props){
-			this.setAttribute( propToAttr[ prop], stream[ prop])
+	render(){
+		// store all current tracks
+		var oldTracks= {}
+		for( var i= 0; i< this.children.length; ++i){
+			var child= this.children[ i]
+			if( !( child instanceof TeleTrackElement)){
+				continue
+			}
+			oldTracks[ child.id]= child
 		}
-	}
-	attributesChangedCallback( name, oldValue, newValue){
-		if( name&& newValue!== undefined){
-			// honestly this is silly & won't do anything good
-			this.stream[ attrToProp[ name]]= newValue
+
+		// set attributes
+		this.setAttribute( "id", this.id)
+		if( this.active){
+			this.setAttribute( "active", "")
+		}else{
+			this.removeAttribute( "active")
+		}
+
+		// remove then add, one and only one listener
+		var stream= this.stream
+		if( stream){
+			stream.removeEventListener( "addtrack", this.addtrackHandler)
+			stream.addEventListener( "addtrack", this.addtrackHandler)
+			stream.removeEventListener( "removetrack", this.removetrackHandler)
+			stream.addEventListener( "removetrack", this.removetrackHandler)
+
+			// add any tracks that aren't found
+			for( var track of stream.getTracks()){
+				if( oldTracks[ track.id]){
+					// do not clean this up in the next step of dropping stales
+					delete oldTracks[ track.id]
+					// don't try to add it again
+					continue
+				}
+				// once shape of addtrack is known, drop this fn and call addtrackHandler instead
+				this._addtrack( track)
+			}
+		}
+
+		// any tracks still in oldTracks are stale & need to be dropped
+		for( var track in oldTracks){
+			var el= oldTracks[ track]
+			this.removeChild( el)
 		}
 	}
 }

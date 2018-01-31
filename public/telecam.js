@@ -1,5 +1,7 @@
 import teleenumerator from "./teleenumerator.js"
 import telemediadevice from "./telemediadevice.js"
+import telestream from "./telestream.js"
+import teletrack from "./teletrack.js"
 import teleaudio from "./teleaudio.js"
 import televideo from "./televideo.js"
 import teletrial from "./teletrial.js"
@@ -13,6 +15,8 @@ import teleshare from "./teleshare.js"
 let teleElements= {
 	"tele-enumerator": teleenumerator,
 	"tele-media-device": telemediadevice,
+	"tele-stream": telestream,
+	"tele-track": teletrack,
 	"tele-trial": teletrial,
 	"tele-audio": teleaudio,
 	"tele-video": televideo,
